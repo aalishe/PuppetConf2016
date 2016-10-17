@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
+# IP of the Student VM
+IP='10.0.2.15'
+
 help() {
   cat <<'EOH'
 Script to make all the required actions during the PuppetConf 2016 training.
+
+As PuppetConf just provided an OVA file with CentOS 6.8 and no more information, this script
+simulate Vagrant with the basic commands (init, up, ssh, halt and destroy). Once we know
+how are we going to use it, this script may be replaced by Vagrant.
 
 Use:
     ./make <command> <parameters>
@@ -11,7 +18,10 @@ Available commands are:
   help:         Print this help
   init:         Initialize the environment for the PuppetConf. Download and run the student VM
   set-password: Set the randomly generated password in the student VM
-  ssh:          SSH to the student VM
+  ssh:          SSH to the Student VM
+  halt:         Stop (poweroff) the Student VM. To start it up, use the command: up
+  up:           StartUp the Student VM. It startup the VM after using the command: halt
+  destroy:      Terminate and delete the Student VM. To have it back again, use the command: init
 EOH
 }
 
@@ -41,7 +51,37 @@ ssh2server() {
   [[ -z ${password} ]] && echo -e "\x1B[91;1m[ERROR]\x1B[0m View the VM in VirtualBox to know the randomly generated password and set it with command set-password:\n  \x1B[92;1m$0 set-password <password>\x1B[0m\n" && exit 1
   echo -e "Enter password: ${password}"
   # TODO: Pass password to ssh when it is possible to make connection to VM
-  ssh root@10.0.2.15
+  ssh root@${IP}
+}
+
+halt() {
+  if ! VBoxManage list runningvms | grep -q student
+  then
+    echo -e "\x1B[91;1m[ERROR]\x1B[0m Student VM is not running or does not exists"
+    exit 1
+  fi
+  VBoxManage controlvm student poweroff
+  VBoxManage list runningvms | grep -q student || echo -e "\x1B[92;1mPuppetConf 2016 Student VM was \x1B[91;1mpowered off\x1B[0m"
+}
+
+up() {
+  if VBoxManage list runningvms | grep -q student
+  then
+    echo -e "\x1B[91;1m[ERROR]\x1B[0m Student VM is running"
+    exit 1
+  fi
+  VBoxManage startvm student
+  VBoxManage list runningvms | grep -q student || echo -e "\x1B[92;1mPuppetConf 2016 Student VM was \x1B[91;1mpowered off\x1B[0m"
+}
+
+destroy() {
+  if ! VBoxManage list vms | grep -q student
+  then
+    echo -e "\x1B[91;1m[ERROR]\x1B[0m Student VM does not exists"
+    exit 1
+  fi
+  VBoxManage unregistervm student --delete
+  VBoxManage list vms | grep -q student || echo -e "\x1B[92;1mPuppetConf 2016 Student VM was \x1B[91;1mdestroyed\x1B[0m"
 }
 
 while (( "$#" )); do
@@ -58,6 +98,19 @@ while (( "$#" )); do
       ;;
     ssh)
       ssh2server
+      ;;
+    halt)
+      halt
+      ;;
+    up)
+      up
+      ;;
+    destroy)
+      destroy
+      ;;
+    *)
+      echo -e "\x1B[91;1m[ERROR]\x1B[0m Command $1 is not defined. Try with command: help"
+      exit 1
       ;;
   esac
   shift
