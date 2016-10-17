@@ -58,5 +58,5 @@ Other option is to clean it all (`unbox` and `destroy`) with `clean`
 
 ## TODO
 
-[ ] The ssh to the VM is not working. Waiting for the training to know what to do. Once it is known, pass the password to ssh or generate an ssh key (like vagrant)
-[ ] Create the same commands for Docker.
+- [ ] The ssh to the VM is not working. Waiting for the training to know what to do. Once it is known, pass the password to ssh or generate an ssh key (like vagrant)
+- [ ] Create the same commands for Docker.
