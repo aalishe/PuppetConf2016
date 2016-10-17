@@ -19,3 +19,12 @@ As PuppetConf just provided an OVA file with CentOS 6.8 and no more information,
 * __halt__: Stop (poweroff) the Student VM. To start it up, use the command: up
 * __up__: StartUp the Student VM. It startup the VM after using the command: halt
 * __destroy__: Terminate and delete the Student VM. To have it back again, use the command: init
+
+### Examples
+
+    ./make init
+    ./make set-password randomly.password
+    ./make ssh
+    ./make halt
+    ./make up
+    ./make destroy
