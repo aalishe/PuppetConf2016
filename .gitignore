@@ -1,6 +1,8 @@
 ## This project files and directories to ignore
 files/*.ova
 .password
+boxes/*
+*.box
 
 ## Puppet files/directories to ignore
 .rspec

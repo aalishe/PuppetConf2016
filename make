@@ -2,6 +2,7 @@
 
 # IP of the Student VM
 IP='10.0.2.15'
+BOXNAME='johandry/puppetconf-2016-student'
 
 help() {
   cat <<'EOH'
@@ -22,6 +23,7 @@ Available commands are:
   halt:         Stop (poweroff) the Student VM. To start it up, use the command: up
   up:           StartUp the Student VM. It startup the VM after using the command: halt
   destroy:      Terminate and delete the Student VM. To have it back again, use the command: init
+  box:          Make a vagrant box from the Student VM. Wait for the training if it is required to have something on the VM.
 EOH
 }
 
@@ -84,6 +86,38 @@ destroy() {
   VBoxManage list vms | grep -q student || echo -e "\x1B[92;1mPuppetConf 2016 Student VM was \x1B[91;1mdestroyed\x1B[0m"
 }
 
+box(){
+  mkdir -p boxes
+
+  [[ ! -e ./boxes/PuppetConf2016Student.box ]] && \
+    vagrant package --base student && \
+    mv package.box boxes/PuppetConf2016Student.box
+
+  vagrant box list | grep -q ${BOXNAME} || \
+    vagrant box add ${BOXNAME} ./boxes/PuppetConf2016Student.box
+
+  vagrant box list | grep -q ${BOXNAME} && \
+    echo -e "\x1B[92;1mVagrant Box PuppetConf 2016 Student was added and is ready to use\x1B[0m"
+}
+
+unbox(){
+  if ! vagrant box list | grep -q ${BOXNAME}
+  then
+    echo -e "\x1B[91;1m[ERROR]\x1B[0m Vagrant Box for PuppetConf Student does not exists"
+    exit 1
+  fi
+
+  vagrant destroy -f
+
+  vagrant box list | grep -q ${BOXNAME} && \
+    vagrant box remove ${BOXNAME}
+
+  rm -f ./boxes/PuppetConf2016Student.box
+
+  vagrant box list | grep -q ${BOXNAME} || \
+    echo -e "\x1B[92;1mVagrant Box PuppetConf 2016 Student was \x1B[91;1mremoved\x1B[92;1m and box file \x1B[91;1mdeleted\x1B[0m"
+}
+
 while (( "$#" )); do
   case $1 in
     help)
@@ -106,6 +140,16 @@ while (( "$#" )); do
       up
       ;;
     destroy)
+      destroy
+      ;;
+    box)
+      box
+      ;;
+    unbox)
+      unbox
+      ;;
+    clean)
+      unbox
       destroy
       ;;
     *)
