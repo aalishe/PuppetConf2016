@@ -24,6 +24,8 @@ Available commands are:
   up:           StartUp the Student VM. It startup the VM after using the command: halt
   destroy:      Terminate and delete the Student VM. To have it back again, use the command: init
   box:          Make a vagrant box from the Student VM. Wait for the training if it is required to have something on the VM.
+  unbox:        Remove the vagrant box created.
+  clean:        Remove all. The same as running unbox and destroy.
 EOH
 }
 

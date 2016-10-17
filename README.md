@@ -20,6 +20,8 @@ As PuppetConf just provided an OVA file with CentOS 6.8 and no more information,
 * __up__: StartUp the Student VM. It startup the VM after using the command: halt
 * __destroy__: Terminate and delete the Student VM. To have it back again, use the command: init
 * __box__: Create a Vagrant box from the Student VM.
+* __unbox__: Remove the Vagrant box.
+* __clean__: Clean it all. The same as unbox and destroy
 
 ### Examples
 
