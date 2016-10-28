@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # IP of the Student VM
-IP='10.0.2.15'
+IP='10.0.1.25'
 BOXNAME='johandry/puppetconf-2016-student'
 
 help() {
