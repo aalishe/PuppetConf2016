@@ -1,6 +1,6 @@
 ## This project files and directories to ignore
 files/*.ova
-.password
+.password_*
 boxes/*
 *.box
 
