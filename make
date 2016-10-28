@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# IP of the Student VM
+# IP of the Student VM. May have to change it to bridge, check the readme.rtf
 IP='10.0.1.25'
 BOXNAME='johandry/puppetconf-2016-student'
 
