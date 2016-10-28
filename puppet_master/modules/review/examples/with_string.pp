@@ -1,0 +1,3 @@
+class { 'review':
+  user => 'elmo',
+}

@@ -1,0 +1,4 @@
+---
+message: "This message is in quotes."
+wordpress::install_dir: "%{apache::docroot}"
+mysql::bindings::php_enable: true
